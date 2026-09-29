@@ -21,7 +21,6 @@ LongTail3D extends [Class-Balanced (CB) loss](https://arxiv.org/abs/1901.05555) 
 - Proposes two engineering-knowledge-informed spatial context constraints, Boundary-CB and Density-CB, as plug-and-play loss terms that need no backbone changes.
 - Explains both constraints through intuitive metaphors and mathematical visualizations.
 - Achieves 55.74% mIoU on Industrial3D with ResPointNet++, a 21.7% relative tail-class improvement (29.59% vs. 24.32%), while preserving head-class accuracy (88.14%).
-- Improves Reducer IoU from 0% to 21.12% and Valve IoU by 24.3% relative (38.06% to 47.32%).
 
 ## Figures
 
@@ -45,18 +44,6 @@ LongTail3D extends [Class-Balanced (CB) loss](https://arxiv.org/abs/1901.05555) 
 
 *Figure: Row-normalized confusion matrices (%) on the Area 6+12 evaluation split for the baseline (left) and Boundary-CB (right). Boundary-CB recognizes Reducer (recall 0% to 25.9%) and labels fewer Pipe points as Elbow, Pump, or Valve.*
 
-## Method
-
-Both constraints multiply the CB+Focal point loss by one spatial factor $m_i$:
-
-$$\mathcal{L} = \frac{1}{N}\sum_{i=1}^{N} w_{y_i}\, m_i\, \phi_i\, \ell_{\mathrm{CE}}\big(f_\theta(p_i), y_i\big)$$
-
-where $w_c = (1-\beta)/(1-\beta^{n_c})$ is the CB weight of class $c$ with $n_c$ points ($\beta = 0.9999$) and $\phi_i = (1 - f_\theta(p_i)_{y_i})^{\gamma_f}$ is the focal factor ($\gamma_f = 2$).
-
-| Constraint | Factor $m_i$ | Setting |
-| --- | --- | --- |
-| Density-CB | $1/(1 + \log \bar{d}_{y_i})$, where $\bar{d}_c$ is the mean number of neighbors within radius $r$ over the points of class $c$ | $r = 0.2$ m |
-| Boundary-CB | $1 + \alpha H_i$, where $H_i \in [0, 1]$ is the entropy of the mean prediction over the $k$ nearest neighbors of point $i$, normalized by $\log C$ | $k = 64$, $\alpha = 1$ |
 
 ## Results
 
